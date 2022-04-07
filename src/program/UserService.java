@@ -1,5 +1,6 @@
 package program;
 
+import program.config.AppConfig;
 import program.strategy.AuthenticationEmailStrategy;
 import program.strategy.AuthenticationUsernameStrategy;
 
@@ -10,6 +11,7 @@ public class UserService {
     private final AuthenticationEmailStrategy authenticationEmailStrategy = AuthenticationEmailStrategy.getInstance();
     private final AuthenticationUsernameStrategy authenticationUsernameStrategy = AuthenticationUsernameStrategy.getInstance();
     private final UserRepository repository = UserRepository.getInstance();
+    private final AppConfig config = AppConfig.getInstance();
 
     private UserService() {
     }
@@ -28,6 +30,7 @@ public class UserService {
             }
         }
 
+        user.setPassword(config.getPasswordEncoder().encode(user.getPassword()));
         this.repository.save(nextIdentifier(), user);
         System.out.println("User successfully register!");
     }
